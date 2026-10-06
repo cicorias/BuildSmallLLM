@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 600" width="860" height="600" role="img" aria-labelledby="t d" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="t">The training loop</title>
+<desc id="d">Each iteration samples a batch, runs the forward pass, clears gradients, backpropagates and applies an AdamW step; every 100 iterations estimate_loss measures train and validation loss in eval mode.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker>
+<marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8984"/></marker>
+</defs>
+<style>
+  .ti{font-size:19px;font-weight:700;fill:#0b0b0b}
+  .st{font-size:13px;fill:#52514e}
+  .b{font-size:14px;font-weight:600;fill:#0b0b0b}
+  .s{font-size:12.5px;fill:#52514e}
+  .xs{font-size:11.5px;fill:#52514e}
+  .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:12.5px;fill:#0b0b0b}
+  .mb{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:13px;font-weight:700;fill:#0b0b0b}
+  .ms{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:11.5px;fill:#52514e}
+  .ml{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:20px;font-weight:600;fill:#0b0b0b}
+</style>
+<rect x="0.5" y="0.5" width="859" height="599" rx="14" fill="#fcfcfb" stroke="#d6d5cf"/>
+<text x="32" y="44" class="ti" text-anchor="start" >The training loop (Part 13)</text>
+<text x="32" y="68" class="st" text-anchor="start" >max_iters = 5000, batch_size = 16, block_size = 32, AdamW lr = 1e-3. Took ~2 minutes on one GPU.</text>
+<rect x="84" y="100" width="380" height="58" rx="10" fill="#f3f2ef" stroke="#a9a8a2" stroke-width="1.5"/>
+<circle cx="108" cy="129.0" r="12" fill="#ffffff" stroke="#52514e"/>
+<text x="108" y="133.5" class="b" text-anchor="middle" >1</text>
+<text x="130" y="125" class="mb" text-anchor="start" >xb, yb = get_batch(&#x27;train&#x27;)</text>
+<text x="130" y="143" class="xs" text-anchor="start" >16 random 32-char windows; yb = xb shifted by 1</text>
+<path d="M274.0,158 L274.0,178" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="84" y="178" width="380" height="58" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<circle cx="108" cy="207.0" r="12" fill="#ffffff" stroke="#52514e"/>
+<text x="108" y="211.5" class="b" text-anchor="middle" >2</text>
+<text x="130" y="203" class="mb" text-anchor="start" >logits, loss = model(xb, yb)</text>
+<text x="130" y="221" class="xs" text-anchor="start" >forward pass → mean cross-entropy (one number)</text>
+<path d="M274.0,236 L274.0,256" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="84" y="256" width="380" height="58" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<circle cx="108" cy="285.0" r="12" fill="#ffffff" stroke="#52514e"/>
+<text x="108" y="289.5" class="b" text-anchor="middle" >3</text>
+<text x="130" y="281" class="mb" text-anchor="start" >optimizer.zero_grad(set_to_none=True)</text>
+<text x="130" y="299" class="xs" text-anchor="start" >forget the previous step&#x27;s gradients</text>
+<path d="M274.0,314 L274.0,334" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="84" y="334" width="380" height="58" rx="10" fill="#fcebeb" stroke="#e34948" stroke-width="1.5"/>
+<circle cx="108" cy="363.0" r="12" fill="#ffffff" stroke="#52514e"/>
+<text x="108" y="367.5" class="b" text-anchor="middle" >4</text>
+<text x="130" y="359" class="mb" text-anchor="start" >loss.backward()</text>
+<text x="130" y="377" class="xs" text-anchor="start" >autograd fills .grad for all 209,729 weights</text>
+<path d="M274.0,392 L274.0,412" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="84" y="412" width="380" height="58" rx="10" fill="#e4f5ee" stroke="#1baf7a" stroke-width="1.5"/>
+<circle cx="108" cy="441.0" r="12" fill="#ffffff" stroke="#52514e"/>
+<text x="108" y="445.5" class="b" text-anchor="middle" >5</text>
+<text x="130" y="437" class="mb" text-anchor="start" >optimizer.step()</text>
+<text x="130" y="455" class="xs" text-anchor="start" >AdamW moves each weight a little downhill</text>
+<path d="M274.0,470 L274.0,492 L54,492 L54,129.0 L84,129.0" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="46" y="300" class="xs" text-anchor="middle" transform="rotate(-90 46 300)">repeat for iter in range(max_iters)</text>
+<line x1="32" y1="528" x2="828" y2="528" stroke="#d6d5cf"/>
+<text x="32" y="554" class="m" text-anchor="start" >After the loop:  context = torch.zeros((1, 1)) → model.generate(context, 500) → decode</text>
+<rect x="506" y="100" width="322" height="330" rx="12" fill="#eeecf8" stroke="#4a3aa7" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="522" y="126" class="b" text-anchor="start" >every eval_interval = 100 iters</text>
+<text x="522" y="144" class="xs" text-anchor="start" >(and on the final one), before step 1</text>
+<text x="522" y="176" class="mb" text-anchor="start" >estimate_loss():</text>
+<text x="522" y="202" class="ms" text-anchor="start" >@torch.no_grad()</text>
+<text x="522" y="217" class="xs" text-anchor="start" >no graph, no gradients</text>
+<text x="522" y="240" class="ms" text-anchor="start" >model.eval()</text>
+<text x="522" y="255" class="xs" text-anchor="start" >dropout off: measure, don&#x27;t train</text>
+<text x="522" y="278" class="ms" text-anchor="start" >for split in train, val:</text>
+<text x="522" y="293" class="xs" text-anchor="start" >200 fresh batches each (eval_iters)</text>
+<text x="522" y="316" class="ms" text-anchor="start" >  losses.mean()</text>
+<text x="522" y="331" class="xs" text-anchor="start" >smooths out batch-to-batch noise</text>
+<text x="522" y="354" class="ms" text-anchor="start" >model.train()</text>
+<text x="522" y="369" class="xs" text-anchor="start" >dropout back on</text>
+<text x="522" y="398" class="xs" text-anchor="start" >→ print, append to train_losses / val_losses</text>
+<path d="M506,129 L470,129" fill="none" stroke="#8a8984" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ahm)"/>
+<line x1="506" y1="452" x2="828" y2="452" stroke="#d6d5cf"/>
+<text x="506" y="476" class="s" text-anchor="start" >Why both splits? train loss says “am I fitting?”;</text>
+<text x="506" y="494" class="s" text-anchor="start" >val loss says “does it generalize?”. A widening</text>
+<text x="506" y="512" class="s" text-anchor="start" >gap means memorizing, not learning.</text>
+</svg>

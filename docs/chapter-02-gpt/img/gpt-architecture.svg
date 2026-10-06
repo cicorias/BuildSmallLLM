@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 960" width="860" height="960" role="img" aria-labelledby="t d" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="t">GPTLanguageModel forward pass</title>
+<desc id="d">Token ids flow through token and position embeddings, four transformer blocks, a final LayerNorm and the lm_head to produce logits; with targets the model returns a cross-entropy loss.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker>
+<marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8984"/></marker>
+</defs>
+<style>
+  .ti{font-size:19px;font-weight:700;fill:#0b0b0b}
+  .st{font-size:13px;fill:#52514e}
+  .b{font-size:14px;font-weight:600;fill:#0b0b0b}
+  .s{font-size:12.5px;fill:#52514e}
+  .xs{font-size:11.5px;fill:#52514e}
+  .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:12.5px;fill:#0b0b0b}
+  .mb{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:13px;font-weight:700;fill:#0b0b0b}
+  .ms{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:11.5px;fill:#52514e}
+  .ml{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:20px;font-weight:600;fill:#0b0b0b}
+</style>
+<rect x="0.5" y="0.5" width="859" height="959" rx="14" fill="#fcfcfb" stroke="#d6d5cf"/>
+<text x="32" y="44" class="ti" text-anchor="start" >GPTLanguageModel — one forward pass</text>
+<text x="32" y="68" class="st" text-anchor="start" >Shapes use the Part 13 settings: B=16 sequences, T=32 positions, C=n_embd=64, vocab_size=65, n_layer=4, n_head=4</text>
+<rect x="70" y="96" width="420" height="58" rx="10" fill="#f3f2ef" stroke="#a9a8a2" stroke-width="1.5"/>
+<text x="280.0" y="121.0" class="b" text-anchor="middle" >idx — integer token ids</text>
+<text x="280.0" y="138.0" class="ms" text-anchor="middle" >&quot;First Ci&quot; → [18, 47, 56, 57, 58, 1, 15, 47]</text>
+<text x="530" y="120" class="m" text-anchor="start" >idx: (B, T) = (16, 32)</text>
+<text x="530" y="139" class="xs" text-anchor="start" >dtype int64, values 0…64</text>
+<path d="M175,154 L175,196" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M385,154 L385,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<text x="392" y="180" class="xs" text-anchor="start" >only T is used: arange(T)</text>
+<rect x="70" y="196" width="204.0" height="66" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="172.0" y="216.5" class="mb" text-anchor="middle" >token_embedding_table</text>
+<text x="172.0" y="233.5" class="ms" text-anchor="middle" >nn.Embedding(65, 64)</text>
+<text x="172.0" y="250.5" class="xs" text-anchor="middle" >what the char is</text>
+<rect x="286.0" y="196" width="204.0" height="66" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="388.0" y="216.5" class="mb" text-anchor="middle" >position_embedding_table</text>
+<text x="388.0" y="233.5" class="ms" text-anchor="middle" >nn.Embedding(32, 64)</text>
+<text x="388.0" y="250.5" class="xs" text-anchor="middle" >where it sits</text>
+<text x="530" y="218" class="m" text-anchor="start" >tok_emb: (16, 32, 64)    4,160 params</text>
+<text x="530" y="240" class="m" text-anchor="start" >pos_emb: (32, 64)        2,048 params</text>
+<text x="530" y="258" class="xs" text-anchor="start" >pos_emb broadcasts across the batch</text>
+<path d="M175,262 L175,300 L264,300" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M385,262 L385,300 L296,300" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="280" cy="300" r="14" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<path d="M274,300 L286,300 M280,294 L280,306" stroke="#0b0b0b" stroke-width="2"/>
+<text x="530" y="304" class="m" text-anchor="start" >x = tok_emb + pos_emb   (16, 32, 64)</text>
+<path d="M280,314 L280,348" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="56" y="348" width="448" height="248" rx="14" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="70" y="372" class="mb" text-anchor="start" >self.blocks = nn.Sequential(Block × n_layer)</text>
+<rect x="86" y="388" width="388" height="76" rx="10" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+<text x="280.0" y="413.5" class="mb" text-anchor="middle" >x = x + sa(ln1(x))</text>
+<text x="280.0" y="430.5" class="s" text-anchor="middle" >multi-head causal self-attention</text>
+<text x="280.0" y="447.5" class="xs" text-anchor="middle" >communicate: each position reads earlier ones</text>
+<path d="M280,464 L280,486" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="86" y="486" width="388" height="76" rx="10" fill="#e4f5ee" stroke="#1baf7a" stroke-width="1.5"/>
+<text x="280.0" y="511.5" class="mb" text-anchor="middle" >x = x + ffwd(ln2(x))</text>
+<text x="280.0" y="528.5" class="s" text-anchor="middle" >feed-forward MLP  64 → 256 → 64</text>
+<text x="280.0" y="545.5" class="xs" text-anchor="middle" >compute: each position thinks on its own</text>
+<text x="280" y="584" class="xs" text-anchor="middle" >× 4 blocks, shape in = shape out</text>
+<text x="530" y="410" class="m" text-anchor="start" >(16, 32, 64) → (16, 32, 64)</text>
+<text x="530" y="432" class="m" text-anchor="start" >per block: 49,792 params</text>
+<text x="530" y="451" class="ms" text-anchor="start" >  attention heads   12,288</text>
+<text x="530" y="468" class="ms" text-anchor="start" >  attention proj     4,160</text>
+<text x="530" y="485" class="ms" text-anchor="start" >  feed-forward      33,088</text>
+<text x="530" y="502" class="ms" text-anchor="start" >  2 × LayerNorm        256</text>
+<text x="530" y="526" class="m" text-anchor="start" >× 4 blocks = 199,168 params</text>
+<text x="530" y="546" class="xs" text-anchor="start" >details: transformer-block.svg</text>
+<path d="M280,596 L280,626" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="70" y="626" width="420" height="54" rx="10" fill="#eeecf8" stroke="#4a3aa7" stroke-width="1.5"/>
+<text x="280.0" y="649.0" class="mb" text-anchor="middle" >ln_f — nn.LayerNorm(64)</text>
+<text x="280.0" y="666.0" class="xs" text-anchor="middle" >final normalization of every position</text>
+<text x="530" y="650" class="m" text-anchor="start" >(16, 32, 64)             128 params</text>
+<path d="M280,680 L280,708" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="70" y="708" width="420" height="58" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="280.0" y="733.0" class="mb" text-anchor="middle" >lm_head — nn.Linear(64, 65)</text>
+<text x="280.0" y="750.0" class="xs" text-anchor="middle" >one score (logit) per vocabulary character</text>
+<text x="530" y="733" class="m" text-anchor="start" >logits: (16, 32, 65)     4,225 params</text>
+<text x="530" y="752" class="xs" text-anchor="start" >a next-char guess at every position</text>
+<path d="M280,766 L280,786 L175,786 L175,810" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M280,786 L385,786 L385,810" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="70" y="810" width="204.0" height="104" rx="10" fill="#fcebeb" stroke="#e34948" stroke-width="1.5"/>
+<text x="172.0" y="834.5" class="b" text-anchor="middle" >targets given</text>
+<text x="172.0" y="850.5" class="xs" text-anchor="middle" >training</text>
+<text x="172.0" y="866.5" class="ms" text-anchor="middle" >cross_entropy(</text>
+<text x="172.0" y="882.5" class="ms" text-anchor="middle" >(512, 65), (512,))</text>
+<text x="172.0" y="898.5" class="ms" text-anchor="middle" >→ scalar loss</text>
+<rect x="286.0" y="810" width="204.0" height="104" rx="10" fill="#f3f2ef" stroke="#a9a8a2" stroke-width="1.5"/>
+<text x="388.0" y="834.5" class="b" text-anchor="middle" >targets = None</text>
+<text x="388.0" y="850.5" class="xs" text-anchor="middle" >inference</text>
+<text x="388.0" y="866.5" class="ms" text-anchor="middle" >loss = None</text>
+<text x="388.0" y="882.5" class="ms" text-anchor="middle" >generate() keeps</text>
+<text x="388.0" y="898.5" class="ms" text-anchor="middle" >logits[:, -1, :]</text>
+<text x="530" y="840" class="m" text-anchor="start" >B·T = 16 × 32 = 512 predictions</text>
+<text x="530" y="858" class="xs" text-anchor="start" >per batch, each scored against</text>
+<text x="530" y="874" class="xs" text-anchor="start" >the true next character</text>
+<line x1="530" y1="896" x2="828" y2="896" stroke="#d6d5cf"/>
+<text x="530" y="918" class="b" text-anchor="start" >Total: 209,729 parameters (0.21M)</text>
+<text x="530" y="937" class="xs" text-anchor="start" >counted from the running model</text>
+</svg>

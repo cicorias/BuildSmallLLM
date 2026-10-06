@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 470" width="860" height="470" role="img" aria-labelledby="t d" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="t">Inputs and targets for next-character prediction</title>
+<desc id="d">The target sequence is the input shifted left by one character, so every position is a separate next-character prediction; the loss averages over all B times T positions.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker>
+<marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8984"/></marker>
+</defs>
+<style>
+  .ti{font-size:19px;font-weight:700;fill:#0b0b0b}
+  .st{font-size:13px;fill:#52514e}
+  .b{font-size:14px;font-weight:600;fill:#0b0b0b}
+  .s{font-size:12.5px;fill:#52514e}
+  .xs{font-size:11.5px;fill:#52514e}
+  .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:12.5px;fill:#0b0b0b}
+  .mb{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:13px;font-weight:700;fill:#0b0b0b}
+  .ms{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:11.5px;fill:#52514e}
+  .ml{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:20px;font-weight:600;fill:#0b0b0b}
+</style>
+<rect x="0.5" y="0.5" width="859" height="469" rx="14" fill="#fcfcfb" stroke="#d6d5cf"/>
+<text x="32" y="44" class="ti" text-anchor="start" >One sequence of T characters = T training examples</text>
+<text x="32" y="68" class="st" text-anchor="start" >Real batch from get_batch() with seed 1337: x = &quot;Let&#x27;s he&quot;, y = &quot;et&#x27;s hea&quot; (y is x shifted left by one)</text>
+<text x="150" y="128" class="b" text-anchor="end" >x  (input)</text>
+<text x="150" y="218" class="s" text-anchor="end" >visible context</text>
+<text x="150" y="290" class="b" text-anchor="end" >y  (target)</text>
+<rect x="170" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="206.0" y="126.5" class="ml" text-anchor="middle" >L</text>
+<text x="206.0" y="94" class="xs" text-anchor="middle" >t=0</text>
+<rect x="172" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="206.0" y="218" class="ms" text-anchor="middle" >L</text>
+<path d="M206.0,144 L206.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M206.0,228 L206.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="170" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="206.0" y="288.5" class="ml" text-anchor="middle" >e</text>
+<rect x="250" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="286.0" y="126.5" class="ml" text-anchor="middle" >e</text>
+<text x="286.0" y="94" class="xs" text-anchor="middle" >t=1</text>
+<rect x="252" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="286.0" y="218" class="ms" text-anchor="middle" >Le</text>
+<path d="M286.0,144 L286.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M286.0,228 L286.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="250" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="286.0" y="288.5" class="ml" text-anchor="middle" >t</text>
+<rect x="330" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="366.0" y="126.5" class="ml" text-anchor="middle" >t</text>
+<text x="366.0" y="94" class="xs" text-anchor="middle" >t=2</text>
+<rect x="332" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="366.0" y="218" class="ms" text-anchor="middle" >Let</text>
+<path d="M366.0,144 L366.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M366.0,228 L366.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="330" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="366.0" y="288.5" class="ml" text-anchor="middle" >&#x27;</text>
+<rect x="410" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="446.0" y="126.5" class="ml" text-anchor="middle" >&#x27;</text>
+<text x="446.0" y="94" class="xs" text-anchor="middle" >t=3</text>
+<rect x="412" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="446.0" y="218" class="ms" text-anchor="middle" >Let&#x27;</text>
+<path d="M446.0,144 L446.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M446.0,228 L446.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="410" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="446.0" y="288.5" class="ml" text-anchor="middle" >s</text>
+<rect x="490" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="526.0" y="126.5" class="ml" text-anchor="middle" >s</text>
+<text x="526.0" y="94" class="xs" text-anchor="middle" >t=4</text>
+<rect x="492" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="526.0" y="218" class="ms" text-anchor="middle" >Let&#x27;s</text>
+<path d="M526.0,144 L526.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M526.0,228 L526.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="490" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="526.0" y="288.5" class="ml" text-anchor="middle" >␣</text>
+<rect x="570" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="606.0" y="126.5" class="ml" text-anchor="middle" >␣</text>
+<text x="606.0" y="94" class="xs" text-anchor="middle" >t=5</text>
+<rect x="572" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="606.0" y="218" class="ms" text-anchor="middle" >Let&#x27;s␣</text>
+<path d="M606.0,144 L606.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M606.0,228 L606.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="570" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="606.0" y="288.5" class="ml" text-anchor="middle" >h</text>
+<rect x="650" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="686.0" y="126.5" class="ml" text-anchor="middle" >h</text>
+<text x="686.0" y="94" class="xs" text-anchor="middle" >t=6</text>
+<rect x="652" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="686.0" y="218" class="ms" text-anchor="middle" >Let&#x27;s␣h</text>
+<path d="M686.0,144 L686.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M686.0,228 L686.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="650" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="686.0" y="288.5" class="ml" text-anchor="middle" >e</text>
+<rect x="730" y="100" width="72" height="44" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="766.0" y="126.5" class="ml" text-anchor="middle" >e</text>
+<text x="766.0" y="94" class="xs" text-anchor="middle" >t=7</text>
+<rect x="732" y="198" width="68" height="30" rx="6" fill="#f3f2ef"/>
+<text x="766.0" y="218" class="ms" text-anchor="middle" >Let&#x27;s␣he</text>
+<path d="M766.0,144 L766.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M766.0,228 L766.0,260" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="730" y="262" width="72" height="44" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="766.0" y="288.5" class="ml" text-anchor="middle" >a</text>
+<text x="170" y="336" class="s" text-anchor="start" >At t=0 the model sees only “L” and must guess “e”; at t=7 it sees all of “Let&#x27;s he” and must guess “a”.</text>
+<text x="170" y="354" class="s" text-anchor="start" >The causal mask is what stops position t from reading y[t] (= x[t+1]) during the same forward pass.</text>
+<line x1="32" y1="378" x2="828" y2="378" stroke="#d6d5cf"/>
+<text x="32" y="404" class="b" text-anchor="start" >Batching:</text>
+<text x="120" y="404" class="m" text-anchor="start" >logits (B, T, 65) → view(B·T, 65)     targets (B, T) → view(B·T)     → F.cross_entropy</text>
+<text x="32" y="430" class="b" text-anchor="start" >Loss:</text>
+<text x="120" y="430" class="m" text-anchor="start" >mean over all B·T positions of  −log p(correct next char)</text>
+<text x="32" y="454" class="s" text-anchor="start" >Untrained, p ≈ 1/65 for every character, so the loss starts near ln 65 ≈ 4.17 (the Part 13 run measured 4.35 at step 0).</text>
+</svg>

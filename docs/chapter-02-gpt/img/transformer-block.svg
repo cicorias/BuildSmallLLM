@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" width="900" height="640" role="img" aria-labelledby="t d" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="t">Inside one transformer Block</title>
+<desc id="d">Pre-LayerNorm transformer block: the residual stream passes through layer norm and multi-head attention, is added back, then through layer norm and a feed-forward network, and is added back again.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker>
+<marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8984"/></marker>
+</defs>
+<style>
+  .ti{font-size:19px;font-weight:700;fill:#0b0b0b}
+  .st{font-size:13px;fill:#52514e}
+  .b{font-size:14px;font-weight:600;fill:#0b0b0b}
+  .s{font-size:12.5px;fill:#52514e}
+  .xs{font-size:11.5px;fill:#52514e}
+  .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:12.5px;fill:#0b0b0b}
+  .mb{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:13px;font-weight:700;fill:#0b0b0b}
+  .ms{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:11.5px;fill:#52514e}
+  .ml{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:20px;font-weight:600;fill:#0b0b0b}
+</style>
+<rect x="0.5" y="0.5" width="899" height="639" rx="14" fill="#fcfcfb" stroke="#d6d5cf"/>
+<text x="32" y="44" class="ti" text-anchor="start" >Inside one Block — communicate, then compute</text>
+<text x="32" y="68" class="st" text-anchor="start" >Pre-LayerNorm with residual connections. Shapes for one Part 13 block: x is (B, T, 64).</text>
+<line x1="110" y1="96" x2="110" y2="566" stroke="#2a78d6" stroke-width="5" stroke-linecap="round" opacity="0.35"/>
+<text x="96" y="112" class="b" text-anchor="end" >x in</text>
+<text x="96" y="130" class="ms" text-anchor="end" >(B,T,64)</text>
+<text x="96" y="230" class="xs" text-anchor="end" >residual</text>
+<text x="96" y="245" class="xs" text-anchor="end" >stream</text>
+<path d="M110,140 L160,140" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="160" y="118" width="82" height="44" rx="10" fill="#eeecf8" stroke="#4a3aa7" stroke-width="1.5"/>
+<text x="201.0" y="144.5" class="mb" text-anchor="middle" >ln1</text>
+<path d="M242,140 L272,140" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="272" y="94" width="360" height="200" rx="10" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+<text x="290" y="118" class="mb" text-anchor="start" >MultiHeadAttention(4 heads × 16)</text>
+<rect x="290" y="132" width="76" height="54" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="328.0" y="155.0" class="b" text-anchor="middle" >Head 0</text>
+<text x="328.0" y="172.0" class="ms" text-anchor="middle" >→ (B,T,16)</text>
+<rect x="374" y="132" width="76" height="54" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="412.0" y="155.0" class="b" text-anchor="middle" >Head 1</text>
+<text x="412.0" y="172.0" class="ms" text-anchor="middle" >→ (B,T,16)</text>
+<rect x="458" y="132" width="76" height="54" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="496.0" y="155.0" class="b" text-anchor="middle" >Head 2</text>
+<text x="496.0" y="172.0" class="ms" text-anchor="middle" >→ (B,T,16)</text>
+<rect x="542" y="132" width="76" height="54" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="580.0" y="155.0" class="b" text-anchor="middle" >Head 3</text>
+<text x="580.0" y="172.0" class="ms" text-anchor="middle" >→ (B,T,16)</text>
+<path d="M290,196 L618,196" stroke="#52514e" stroke-width="1.2"/>
+<text x="452" y="214" class="m" text-anchor="middle" >torch.cat(dim=-1)  →  (B, T, 64)</text>
+<text x="452" y="238" class="m" text-anchor="middle" >proj: Linear(64, 64)  →  Dropout</text>
+<text x="452" y="262" class="xs" text-anchor="middle" >heads learn different “what to look for”</text>
+<text x="452" y="280" class="xs" text-anchor="middle" >and share the result through proj</text>
+<path d="M452,294 L452,318 L126,318" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="110" cy="318" r="14" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<path d="M104,318 L116,318 M110,312 L110,324" stroke="#0b0b0b" stroke-width="2"/>
+<text x="134" y="340" class="m" text-anchor="start" >x = x + self.sa(self.ln1(x))</text>
+<path d="M110,380 L160,380" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="160" y="358" width="82" height="44" rx="10" fill="#eeecf8" stroke="#4a3aa7" stroke-width="1.5"/>
+<text x="201.0" y="384.5" class="mb" text-anchor="middle" >ln2</text>
+<path d="M242,380 L272,380" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="272" y="352" width="360" height="120" rx="10" fill="#e4f5ee" stroke="#1baf7a" stroke-width="1.5"/>
+<text x="290" y="376" class="mb" text-anchor="start" >FeedForward(64)</text>
+<rect x="290" y="390" width="78" height="44" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="329.0" y="408.0" class="b" text-anchor="middle" >Linear</text>
+<text x="329.0" y="425.0" class="ms" text-anchor="middle" >64→256</text>
+<rect x="374" y="390" width="78" height="44" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="413.0" y="416.5" class="b" text-anchor="middle" >ReLU</text>
+<rect x="458" y="390" width="78" height="44" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="497.0" y="408.0" class="b" text-anchor="middle" >Linear</text>
+<text x="497.0" y="425.0" class="ms" text-anchor="middle" >256→64</text>
+<rect x="542" y="390" width="78" height="44" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="581.0" y="416.5" class="b" text-anchor="middle" >Dropout</text>
+<text x="452" y="458" class="xs" text-anchor="middle" >same MLP applied to every position independently</text>
+<path d="M452,472 L452,496 L126,496" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="110" cy="496" r="14" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<path d="M104,496 L116,496 M110,490 L110,502" stroke="#0b0b0b" stroke-width="2"/>
+<text x="134" y="518" class="m" text-anchor="start" >x = x + self.ffwd(self.ln2(x))</text>
+<path d="M110,510 L110,566" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="124" y="560" class="b" text-anchor="start" >x out (B,T,64) → next Block</text>
+<text x="32" y="604" class="s" text-anchor="start" >The “+” keeps the original signal and only adds a correction, so gradients reach early layers</text>
+<text x="32" y="622" class="s" text-anchor="start" >directly. LayerNorm before each sub-layer keeps activations on a stable scale.</text>
+<rect x="664" y="94" width="210" height="446" rx="12" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="680" y="120" class="b" text-anchor="start" >Inside one Head</text>
+<text x="680" y="146" class="ms" text-anchor="start" >k, q, v = Linear(64→16)(x)</text>
+<text x="680" y="161" class="xs" text-anchor="start" >three views of each token</text>
+<text x="680" y="186" class="ms" text-anchor="start" >wei = q @ kᵀ · C^-0.5</text>
+<text x="680" y="201" class="xs" text-anchor="start" >(B,T,T) affinity scores</text>
+<text x="680" y="226" class="ms" text-anchor="start" >mask where tril == 0</text>
+<text x="680" y="241" class="xs" text-anchor="start" >set future to −inf</text>
+<text x="680" y="266" class="ms" text-anchor="start" >softmax(wei, dim=-1)</text>
+<text x="680" y="281" class="xs" text-anchor="start" >each row sums to 1</text>
+<text x="680" y="306" class="ms" text-anchor="start" >dropout(wei)</text>
+<text x="680" y="321" class="xs" text-anchor="start" >regularize attention</text>
+<text x="680" y="346" class="ms" text-anchor="start" >out = wei @ v</text>
+<text x="680" y="361" class="xs" text-anchor="start" >(B,T,16) weighted mix</text>
+<text x="680" y="382" class="xs" text-anchor="start" >causal mask (T=6):</text>
+<rect x="714" y="392" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="730" y="392" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="746" y="392" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="762" y="392" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="778" y="392" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="794" y="392" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="714" y="408" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="730" y="408" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="746" y="408" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="762" y="408" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="778" y="408" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="794" y="408" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="714" y="424" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="730" y="424" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="746" y="424" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="762" y="424" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="778" y="424" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="794" y="424" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="714" y="440" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="730" y="440" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="746" y="440" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="762" y="440" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="778" y="440" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="794" y="440" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="714" y="456" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="730" y="456" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="746" y="456" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="762" y="456" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="778" y="456" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="794" y="456" width="14" height="14" rx="2" fill="#ffffff" stroke="#d6d5cf"/>
+<rect x="714" y="472" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="730" y="472" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="746" y="472" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="762" y="472" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="778" y="472" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<rect x="794" y="472" width="14" height="14" rx="2" fill="#eb6834" fill-opacity="0.75" stroke="#d6d5cf"/>
+<text x="680" y="498" class="xs" text-anchor="start" >row t may only attend to</text>
+<text x="680" y="512" class="xs" text-anchor="start" >columns 0…t (no peeking)</text>
+</svg>

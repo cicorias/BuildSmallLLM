@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 400" width="860" height="400" role="img" aria-labelledby="t d" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="t">Effect of temperature on next-character probabilities</title>
+<desc id="d">For the context &quot;ROMEO:\nI will th&quot;, p(e) is 85% at temperature 0.5, 55% at 1.0 and 39% at 1.5.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker>
+<marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8984"/></marker>
+</defs>
+<style>
+  .ti{font-size:19px;font-weight:700;fill:#0b0b0b}
+  .st{font-size:13px;fill:#52514e}
+  .b{font-size:14px;font-weight:600;fill:#0b0b0b}
+  .s{font-size:12.5px;fill:#52514e}
+  .xs{font-size:11.5px;fill:#52514e}
+  .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:12.5px;fill:#0b0b0b}
+  .mb{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:13px;font-weight:700;fill:#0b0b0b}
+  .ms{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:11.5px;fill:#52514e}
+  .ml{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:20px;font-weight:600;fill:#0b0b0b}
+</style>
+<rect x="0.5" y="0.5" width="859" height="399" rx="14" fill="#fcfcfb" stroke="#d6d5cf"/>
+<text x="32" y="44" class="ti" text-anchor="start" >Temperature reshapes the same logits</text>
+<text x="32" y="68" class="st" text-anchor="start" >probs = softmax(logits / T) for the next character after &quot;ROMEO:\nI will th&quot; (top 7 shown)</text>
+<text x="40" y="104" class="b" text-anchor="start" >T = 0.5 — sharper</text>
+<line x1="40" y1="316.0" x2="280" y2="316.0" stroke="#ebeae6"/>
+<text x="34" y="320.0" class="xs" text-anchor="end" >0%</text>
+<line x1="40" y1="261.6" x2="280" y2="261.6" stroke="#ebeae6"/>
+<text x="34" y="265.55555555555554" class="xs" text-anchor="end" >25%</text>
+<line x1="40" y1="207.1" x2="280" y2="207.1" stroke="#ebeae6"/>
+<text x="34" y="211.11111111111111" class="xs" text-anchor="end" >50%</text>
+<line x1="40" y1="152.7" x2="280" y2="152.7" stroke="#ebeae6"/>
+<text x="34" y="156.66666666666666" class="xs" text-anchor="end" >75%</text>
+<path d="M48,316 L48,135.9 Q48,131.9 52,131.9 L70,131.9 Q74,131.9 74,135.9 L74,316 Z" fill="#2a78d6"><title>T=0.5  'e': 84.6%</title></path>
+<text x="61.0" y="334" class="mb" text-anchor="middle" >e</text>
+<text x="61.0" y="125.85509220759073" class="xs" text-anchor="middle" >85</text>
+<path d="M82,316 L82,300.0 Q82,296.0 86,296.0 L104,296.0 Q108,296.0 108,300.0 L108,316 Z" fill="#2a78d6"><title>T=0.5  'a': 9.2%</title></path>
+<text x="95.0" y="334" class="mb" text-anchor="middle" >a</text>
+<text x="95.0" y="289.966213007768" class="xs" text-anchor="middle" >9</text>
+<path d="M116,316 L116,312.4 Q116,308.4 120,308.4 L138,308.4 Q142,308.4 142,312.4 L142,316 Z" fill="#2a78d6"><title>T=0.5  'o': 3.5%</title></path>
+<text x="129.0" y="334" class="mb" text-anchor="middle" >o</text>
+<path d="M150,316 L150,315.0 Q150,311.0 154,311.0 L172,311.0 Q176,311.0 176,315.0 L176,316 Z" fill="#2a78d6"><title>T=0.5  'i': 2.3%</title></path>
+<text x="163.0" y="334" class="mb" text-anchor="middle" >i</text>
+<path d="M184,316 L184,316.0 Q184,315.3 184.71510400416122,315.3 L209.28489599583878,315.3 Q210,315.3 210,316.0 L210,316 Z" fill="#2a78d6"><title>T=0.5  'y': 0.3%</title></path>
+<text x="197.0" y="334" class="mb" text-anchor="middle" >y</text>
+<path d="M218,316 L218,316.0 Q218,315.8 218.1952354868667,315.8 L243.8047645131333,315.8 Q244,315.8 244,316.0 L244,316 Z" fill="#2a78d6"><title>T=0.5  'r': 0.1%</title></path>
+<text x="231.0" y="334" class="mb" text-anchor="middle" >r</text>
+<path d="M252,316 L252,316.0 Q252,315.9 252.0663956386658,315.9 L277.9336043613342,315.9 Q278,315.9 278,316.0 L278,316 Z" fill="#2a78d6"><title>T=0.5  'u': 0.0%</title></path>
+<text x="265.0" y="334" class="mb" text-anchor="middle" >u</text>
+<line x1="40" y1="316" x2="280" y2="316" stroke="#8a8984"/>
+<text x="320" y="104" class="b" text-anchor="start" >T = 1.0 — as trained</text>
+<line x1="320" y1="316.0" x2="560" y2="316.0" stroke="#ebeae6"/>
+<line x1="320" y1="261.6" x2="560" y2="261.6" stroke="#ebeae6"/>
+<line x1="320" y1="207.1" x2="560" y2="207.1" stroke="#ebeae6"/>
+<line x1="320" y1="152.7" x2="560" y2="152.7" stroke="#ebeae6"/>
+<path d="M328,316 L328,200.2 Q328,196.2 332,196.2 L350,196.2 Q354,196.2 354,200.2 L354,316 Z" fill="#2a78d6"><title>T=1.0  'e': 55.0%</title></path>
+<text x="341.0" y="334" class="mb" text-anchor="middle" >e</text>
+<text x="341.0" y="190.18510818481445" class="xs" text-anchor="middle" >55</text>
+<path d="M362,316 L362,280.5 Q362,276.5 366,276.5 L384,276.5 Q388,276.5 388,280.5 L388,316 Z" fill="#2a78d6"><title>T=1.0  'a': 18.1%</title></path>
+<text x="375.0" y="334" class="mb" text-anchor="middle" >a</text>
+<text x="375.0" y="270.4804039001465" class="xs" text-anchor="middle" >18</text>
+<path d="M396,316 L396,295.6 Q396,291.6 400,291.6 L418,291.6 Q422,291.6 422,295.6 L422,316 Z" fill="#2a78d6"><title>T=1.0  'o': 11.2%</title></path>
+<text x="409.0" y="334" class="mb" text-anchor="middle" >o</text>
+<text x="409.0" y="285.62996533181934" class="xs" text-anchor="middle" >11</text>
+<path d="M430,316 L430,300.2 Q430,296.2 434,296.2 L452,296.2 Q456,296.2 456,300.2 L456,316 Z" fill="#2a78d6"><title>T=1.0  'i': 9.1%</title></path>
+<text x="443.0" y="334" class="mb" text-anchor="middle" >i</text>
+<text x="443.0" y="290.2498497565587" class="xs" text-anchor="middle" >9</text>
+<path d="M464,316 L464,312.5 Q464,308.5 468,308.5 L486,308.5 Q490,308.5 490,312.5 L490,316 Z" fill="#2a78d6"><title>T=1.0  'y': 3.4%</title></path>
+<text x="477.0" y="334" class="mb" text-anchor="middle" >y</text>
+<path d="M498,316 L498,316.0 Q498,312.1 501.9013086259365,312.1 L520.0986913740635,312.1 Q524,312.1 524,316.0 L524,316 Z" fill="#2a78d6"><title>T=1.0  'r': 1.8%</title></path>
+<text x="511.0" y="334" class="mb" text-anchor="middle" >r</text>
+<path d="M532,316 L532,316.0 Q532,313.7 534.2751011533869,313.7 L555.7248988466131,313.7 Q558,313.7 558,316.0 L558,316 Z" fill="#2a78d6"><title>T=1.0  'u': 1.0%</title></path>
+<text x="545.0" y="334" class="mb" text-anchor="middle" >u</text>
+<line x1="320" y1="316" x2="560" y2="316" stroke="#8a8984"/>
+<text x="600" y="104" class="b" text-anchor="start" >T = 1.5 — flatter</text>
+<line x1="600" y1="316.0" x2="840" y2="316.0" stroke="#ebeae6"/>
+<line x1="600" y1="261.6" x2="840" y2="261.6" stroke="#ebeae6"/>
+<line x1="600" y1="207.1" x2="840" y2="207.1" stroke="#ebeae6"/>
+<line x1="600" y1="152.7" x2="840" y2="152.7" stroke="#ebeae6"/>
+<path d="M608,316 L608,234.2 Q608,230.2 612,230.2 L630,230.2 Q634,230.2 634,234.2 L634,316 Z" fill="#2a78d6"><title>T=1.5  'e': 39.4%</title></path>
+<text x="621.0" y="334" class="mb" text-anchor="middle" >e</text>
+<text x="621.0" y="224.23107822736102" class="xs" text-anchor="middle" >39</text>
+<path d="M642,316 L642,279.1 Q642,275.1 646,275.1 L664,275.1 Q668,275.1 668,279.1 L668,316 Z" fill="#2a78d6"><title>T=1.5  'a': 18.8%</title></path>
+<text x="655.0" y="334" class="mb" text-anchor="middle" >a</text>
+<text x="655.0" y="269.0552966462241" class="xs" text-anchor="middle" >19</text>
+<path d="M676,316 L676,290.3 Q676,286.3 680,286.3 L698,286.3 Q702,286.3 702,290.3 L702,316 Z" fill="#2a78d6"><title>T=1.5  'o': 13.6%</title></path>
+<text x="689.0" y="334" class="mb" text-anchor="middle" >o</text>
+<text x="689.0" y="280.33619152175055" class="xs" text-anchor="middle" >14</text>
+<path d="M710,316 L710,294.2 Q710,290.2 714,290.2 L732,290.2 Q736,290.2 736,294.2 L736,316 Z" fill="#2a78d6"><title>T=1.5  'i': 11.8%</title></path>
+<text x="723.0" y="334" class="mb" text-anchor="middle" >i</text>
+<text x="723.0" y="284.21485311455194" class="xs" text-anchor="middle" >12</text>
+<path d="M744,316 L744,306.5 Q744,302.5 748,302.5 L766,302.5 Q770,302.5 770,306.5 L770,316 Z" fill="#2a78d6"><title>T=1.5  'y': 6.2%</title></path>
+<text x="757.0" y="334" class="mb" text-anchor="middle" >y</text>
+<text x="757.0" y="296.5186588631736" class="xs" text-anchor="middle" >6</text>
+<path d="M778,316 L778,311.3 Q778,307.3 782,307.3 L800,307.3 Q804,307.3 804,311.3 L804,316 Z" fill="#2a78d6"><title>T=1.5  'r': 4.0%</title></path>
+<text x="791.0" y="334" class="mb" text-anchor="middle" >r</text>
+<path d="M812,316 L812,313.9 Q812,309.9 816,309.9 L834,309.9 Q838,309.9 838,313.9 L838,316 Z" fill="#2a78d6"><title>T=1.5  'u': 2.8%</title></path>
+<text x="825.0" y="334" class="mb" text-anchor="middle" >u</text>
+<line x1="600" y1="316" x2="840" y2="316" stroke="#8a8984"/>
+<text x="32" y="366" class="s" text-anchor="start" >Low T → nearly greedy: safe but repetitive.  High T → more variety and more misspellings.</text>
+<text x="32" y="386" class="s" text-anchor="start" >The Part 12 generate() always samples at T = 1; the “COMPLETE AND UPDATED” cell adds temperature and top_k.</text>
+</svg>

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 500" width="860" height="500" role="img" aria-labelledby="t d" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="t">The generate loop</title>
+<desc id="d">Autoregressive generation: crop the context to the last block_size tokens, run the model, keep the last position&#x27;s logits, softmax, sample one token, append it, and repeat.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker>
+<marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8984"/></marker>
+</defs>
+<style>
+  .ti{font-size:19px;font-weight:700;fill:#0b0b0b}
+  .st{font-size:13px;fill:#52514e}
+  .b{font-size:14px;font-weight:600;fill:#0b0b0b}
+  .s{font-size:12.5px;fill:#52514e}
+  .xs{font-size:11.5px;fill:#52514e}
+  .m{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:12.5px;fill:#0b0b0b}
+  .mb{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:13px;font-weight:700;fill:#0b0b0b}
+  .ms{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:11.5px;fill:#52514e}
+  .ml{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;font-size:20px;font-weight:600;fill:#0b0b0b}
+</style>
+<rect x="0.5" y="0.5" width="859" height="499" rx="14" fill="#fcfcfb" stroke="#d6d5cf"/>
+<text x="32" y="44" class="ti" text-anchor="start" >Inference — generate() writes one character at a time</text>
+<text x="32" y="68" class="st" text-anchor="start" >Autoregressive: every sampled character becomes part of the input for the next step.</text>
+<rect x="60" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="94" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="128" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="162" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="196" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="230" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="264" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="298" y="104" width="30" height="30" rx="5" fill="#f3f2ef" stroke="#d6d5cf"/>
+<rect x="332" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="366" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="400" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="434" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="468" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="502" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="536" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="570" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="604" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="638" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="672" y="104" width="30" height="30" rx="5" fill="#e8f1fc" stroke="#2a78d6"/>
+<rect x="706" y="104" width="30" height="30" rx="5" fill="#fdf3dc" stroke="#c98500" stroke-dasharray="4 3"/>
+<text x="721.0" y="124" class="b" text-anchor="middle" >?</text>
+<text x="746" y="117" class="xs" text-anchor="start" >next char</text>
+<text x="746" y="131" class="xs" text-anchor="start" >to predict</text>
+<text x="60" y="154" class="xs" text-anchor="start" >idx (1, T_total): everything generated so far</text>
+<path d="M332,96 L332,90 L702,90 L702,96" fill="none" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="519.0" y="84" class="ms" text-anchor="middle" >idx_cond = idx[:, -block_size:]  (the position table only has 32 rows)</text>
+<rect x="40" y="196" width="148" height="84" rx="10" fill="#fdf3dc" stroke="#c98500" stroke-width="1.5"/>
+<text x="114.0" y="223.5" class="mb" text-anchor="middle" >model(idx_cond)</text>
+<text x="114.0" y="242.5" class="xs" text-anchor="middle" >full forward pass</text>
+<text x="114.0" y="261.5" class="ms" text-anchor="middle" >logits (1, T, 65)</text>
+<path d="M188,238.0 L202,238.0" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="202" y="196" width="148" height="84" rx="10" fill="#ffffff" stroke="#b9b8b2" stroke-width="1.5"/>
+<text x="276.0" y="223.5" class="mb" text-anchor="middle" >logits[:, -1, :]</text>
+<text x="276.0" y="242.5" class="xs" text-anchor="middle" >last position only</text>
+<text x="276.0" y="261.5" class="ms" text-anchor="middle" >(1, 65)</text>
+<path d="M350,238.0 L364,238.0" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="364" y="196" width="148" height="84" rx="10" fill="#eeecf8" stroke="#4a3aa7" stroke-width="1.5"/>
+<text x="438.0" y="223.5" class="mb" text-anchor="middle" >F.softmax(dim=-1)</text>
+<text x="438.0" y="242.5" class="xs" text-anchor="middle" >scores → probabilities</text>
+<text x="438.0" y="261.5" class="ms" text-anchor="middle" >(1, 65), sums to 1</text>
+<path d="M512,238.0 L526,238.0" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="526" y="196" width="148" height="84" rx="10" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+<text x="600.0" y="223.5" class="mb" text-anchor="middle" >torch.multinomial</text>
+<text x="600.0" y="242.5" class="xs" text-anchor="middle" >draw 1 id ∝ probs</text>
+<text x="600.0" y="261.5" class="ms" text-anchor="middle" >idx_next (1, 1)</text>
+<path d="M674,238.0 L688,238.0" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="688" y="196" width="148" height="84" rx="10" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
+<text x="762.0" y="223.5" class="mb" text-anchor="middle" >torch.cat(dim=1)</text>
+<text x="762.0" y="242.5" class="xs" text-anchor="middle" >append to idx</text>
+<text x="762.0" y="261.5" class="ms" text-anchor="middle" >(1, T_total + 1)</text>
+<path d="M379.0,140 L114.0,196" fill="none" stroke="#8a8984" stroke-width="1.6" marker-end="url(#ahm)"/>
+<path d="M762.0,280 L762.0,310 L114.0,310 L114.0,282" fill="none" stroke="#52514e" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="401.0" y="328" class="xs" text-anchor="middle" >repeat max_new_tokens times (crop again each step)</text>
+<line x1="32" y1="360" x2="828" y2="360" stroke="#d6d5cf"/>
+<text x="32" y="386" class="b" text-anchor="start" >Real example (trained Part 13 model, eval mode):</text>
+<text x="32" y="410" class="m" text-anchor="start" >context &quot;ROMEO:\nI will th&quot; →</text>
+<text x="290" y="410" class="m" text-anchor="start" >&#x27;e&#x27; 55%</text>
+<text x="382" y="410" class="m" text-anchor="start" >&#x27;a&#x27; 18%</text>
+<text x="474" y="410" class="m" text-anchor="start" >&#x27;o&#x27; 11%</text>
+<text x="566" y="410" class="m" text-anchor="start" >&#x27;i&#x27; 9%</text>
+<text x="658" y="410" class="m" text-anchor="start" >&#x27;y&#x27; 3%</text>
+<text x="32" y="434" class="s" text-anchor="start" >multinomial draws &#x27;e&#x27; most often, but &#x27;a&#x27;, &#x27;o&#x27;, &#x27;i&#x27; remain possible: that is why each run reads differently.</text>
+<text x="32" y="454" class="s" text-anchor="start" >Note: no KV cache here. Each step recomputes all ≤32 positions and throws away all but the last row.</text>
+</svg>
