@@ -1,0 +1,57 @@
+[tools]
+python = "3.12"
+uv = "latest"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.setup]
+description = "Install dependencies with the PyTorch build for this machine"
+usage = '''
+arg "[backend]" help="PyTorch build to install (auto-detected when omitted)" default="auto" {
+  choices "auto" "cpu" "cu126" "cu130" "cu132" "rocm"
+}
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+backend="${usage_backend:-auto}"
+if [ "$backend" = "auto" ]; then
+  if [ "$(uname -s)" = "Darwin" ]; then
+    backend=cpu
+  elif command -v nvidia-smi >/dev/null 2>&1; then
+    # Highest CUDA runtime the installed driver supports, e.g. "13.0" -> 130
+    cuda=$(nvidia-smi | sed -n 's/.*CUDA Version: *\([0-9]*\)\.\([0-9]*\).*/\1\2/p' | head -1)
+    if   [ "${cuda:-0}" -ge 132 ]; then backend=cu132
+    elif [ "${cuda:-0}" -ge 130 ]; then backend=cu130
+    else backend=cu126
+    fi
+  elif [ -e /dev/kfd ] || command -v rocminfo >/dev/null 2>&1; then
+    backend=rocm
+  else
+    backend=cpu
+  fi
+fi
+echo "Installing with PyTorch backend: $backend"
+uv sync --extra "$backend"
+'''
+
+[tasks.check]
+description = "Show which accelerator PyTorch can see"
+run = '''
+uv run --no-sync python -c "
+import torch
+print('torch', torch.__version__)
+if torch.cuda.is_available():
+    kind = 'ROCm/HIP ' + torch.version.hip if torch.version.hip else 'CUDA ' + torch.version.cuda
+    print(kind, '->', torch.cuda.get_device_name(0))
+elif torch.backends.mps.is_available():
+    print('Apple MPS')
+else:
+    print('CPU only')
+"
+'''
+
+[tasks.kernel]
+description = "Register this venv as a Jupyter kernel"
+run = "uv run --no-sync python -m ipykernel install --user --name buildsmallllm --display-name 'BuildSmallLLM (.venv)'"

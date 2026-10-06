@@ -1,0 +1,87 @@
+[project]
+name = "buildsmallllm"
+version = "0.1.0"
+description = "Notebooks for building a small LLM from scratch"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipykernel>=7.4.0",
+]
+
+# PyTorch is selected via exactly one of these extras, e.g. `uv sync --extra cu130`.
+[project.optional-dependencies]
+cpu = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
+cu126 = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
+cu130 = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
+cu132 = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
+rocm = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
+
+[tool.uv]
+conflicts = [
+    [
+        { extra = "cpu" },
+        { extra = "cu126" },
+        { extra = "cu130" },
+        { extra = "cu132" },
+        { extra = "rocm" },
+    ],
+]
+
+# macOS has no CUDA/ROCm builds; its CPU/MPS wheels come from PyPI.
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+    { index = "pytorch-cu126", extra = "cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cu130", extra = "cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cu132", extra = "cu132", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-rocm", extra = "rocm", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+    { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+    { index = "pytorch-cu126", extra = "cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cu130", extra = "cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cu132", extra = "cu132", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-rocm", extra = "rocm", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu132"
+url = "https://download.pytorch.org/whl/cu132"
+explicit = true
+
+# Not explicit: the ROCm torch wheels depend on `rocm` / `rocm-sdk-*` runtime
+# packages that only live on this index (PyPI's `rocm` is an unrelated 0.1.0),
+# and transitive dependencies can't be pinned via tool.uv.sources.
+[[tool.uv.index]]
+name = "pytorch-rocm"
+url = "https://download.pytorch.org/whl/rocm7.14"
