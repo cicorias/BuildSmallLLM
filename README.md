@@ -7,13 +7,14 @@ Notebooks (in `src/`) for building, training, and deploying a small LLM from scr
 - [uv](https://docs.astral.sh/uv/) (and optionally [mise](https://mise.jdx.dev/))
 - Python 3.12
 
-PyTorch is **not** installed by default. You pick exactly one build — CPU, CUDA, or ROCm — with a uv "extra".
+PyTorch is **not** installed by default. You pick exactly one build — CPU, Apple MPS, CUDA, or ROCm — with a uv "extra".
 
 ## PyTorch extras
 
 | Extra   | Build                | Use when                                                  | Platforms             |
 |---------|----------------------|-----------------------------------------------------------|-----------------------|
 | `cpu`   | CPU only             | No GPU, CI, or macOS (macOS gets the PyPI wheel with MPS) | Linux, Windows, macOS |
+| `mps`   | Apple Metal (MPS)    | Apple Silicon Macs (M1–M5)                                | macOS (arm64)         |
 | `cu126` | CUDA 12.6            | Older NVIDIA drivers (`nvidia-smi` reports CUDA 12.x)     | Linux, Windows        |
 | `cu130` | CUDA 13.0            | NVIDIA driver supports CUDA 13.0 or 13.1                  | Linux, Windows        |
 | `cu132` | CUDA 13.2            | Recent NVIDIA drivers (CUDA 13.2+)                        | Linux, Windows        |
@@ -25,6 +26,7 @@ The "CUDA Version" in the top-right of `nvidia-smi` is the newest CUDA build you
 
 ```bash
 uv sync --extra cpu      # CPU only
+uv sync --extra mps      # Apple Silicon (Metal/MPS)
 uv sync --extra cu126    # NVIDIA, CUDA 12.6
 uv sync --extra cu130    # NVIDIA, CUDA 13.0
 uv sync --extra cu132    # NVIDIA, CUDA 13.2

@@ -9,7 +9,7 @@ _.python.venv = { path = ".venv", create = true }
 description = "Install dependencies with the PyTorch build for this machine"
 usage = '''
 arg "[backend]" help="PyTorch build to install (auto-detected when omitted)" default="auto" {
-  choices "auto" "cpu" "cu126" "cu130" "cu132" "rocm"
+  choices "auto" "cpu" "mps" "cu126" "cu130" "cu132" "rocm"
 }
 '''
 run = '''
@@ -18,7 +18,8 @@ set -euo pipefail
 backend="${usage_backend:-auto}"
 if [ "$backend" = "auto" ]; then
   if [ "$(uname -s)" = "Darwin" ]; then
-    backend=cpu
+    # Apple Silicon gets Metal (MPS); Intel Macs have no current torch wheels anyway
+    if [ "$(uname -m)" = "arm64" ]; then backend=mps; else backend=cpu; fi
   elif command -v nvidia-smi >/dev/null 2>&1; then
     # Highest CUDA runtime the installed driver supports, e.g. "13.0" -> 130
     cuda=$(nvidia-smi | sed -n 's/.*CUDA Version: *\([0-9]*\)\.\([0-9]*\).*/\1\2/p' | head -1)

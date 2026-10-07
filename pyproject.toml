@@ -30,6 +30,11 @@ rocm = [
     "torch>=2.14.1",
     "torchvision>=0.29.1",
 ]
+# Apple Silicon (Metal/MPS). Same PyPI wheel `cpu` gets on macOS; named for clarity.
+mps = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
 
 [tool.uv]
 conflicts = [
@@ -39,13 +44,20 @@ conflicts = [
         { extra = "cu130" },
         { extra = "cu132" },
         { extra = "rocm" },
+        { extra = "mps" },
     ],
 ]
+# Lock must always include installable wheels for Apple Silicon Macs.
+required-environments = [
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
 
-# macOS has no CUDA/ROCm builds; its CPU/MPS wheels come from PyPI.
+# macOS has no CUDA/ROCm builds; its CPU/MPS wheels come from PyPI. The darwin
+# entry must be explicit, or uv falls through to the (non-explicit) ROCm index.
 [tool.uv.sources]
 torch = [
     { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+    { index = "pypi", marker = "sys_platform == 'darwin'" },
     { index = "pytorch-cu126", extra = "cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
     { index = "pytorch-cu130", extra = "cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
     { index = "pytorch-cu132", extra = "cu132", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
@@ -53,11 +65,17 @@ torch = [
 ]
 torchvision = [
     { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+    { index = "pypi", marker = "sys_platform == 'darwin'" },
     { index = "pytorch-cu126", extra = "cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
     { index = "pytorch-cu130", extra = "cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
     { index = "pytorch-cu132", extra = "cu132", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
     { index = "pytorch-rocm", extra = "rocm", marker = "sys_platform == 'linux'" },
 ]
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
